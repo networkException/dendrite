@@ -99,6 +99,10 @@ func main() {
 	p2pMonolith.SetupDendrite(processCtx, cfg, cm, routers, *instancePort, *instanceRelayingEnabled, enableMetrics, enableWebsockets)
 	p2pMonolith.StartMonolith()
 
+	logrus.Info("Deferring shutdown")
+
+	defer p2pMonolith.WaitForShutdown()
+
 	go func() {
 		listener, err := net.Listen("tcp", *instanceListen)
 		if err != nil {
